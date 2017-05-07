@@ -12,10 +12,14 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include <string>
+#include "Entry.hpp"
 
 int init();
 int readEntry(std::string);
+
+std::vector<Entry> entries;
 
 std::string entryFile = "Entry.txt";
 
