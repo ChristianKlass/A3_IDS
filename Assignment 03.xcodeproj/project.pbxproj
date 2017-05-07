@@ -26,6 +26,7 @@
 		4DD8F1721EBF172A005C2607 /* Assignment 03 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Assignment 03"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DD8F17C1EBF176F005C2607 /* IDS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IDS.cpp; path = src/IDS.cpp; sourceTree = "<group>"; };
 		4DD8F17D1EBF176F005C2607 /* IDS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IDS.hpp; path = src/IDS.hpp; sourceTree = "<group>"; };
+		4DD8F17F1EBF1A76005C2607 /* Assignment Brief.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Assignment Brief.pdf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,10 +59,27 @@
 		4DD8F1741EBF172A005C2607 /* Assignment 03 */ = {
 			isa = PBXGroup;
 			children = (
+				4DD8F1801EBF1A7C005C2607 /* References */,
 				4DD8F17C1EBF176F005C2607 /* IDS.cpp */,
-				4DD8F17D1EBF176F005C2607 /* IDS.hpp */,
+				4DD8F1811EBF1A88005C2607 /* Headers */,
 			);
 			path = "Assignment 03";
+			sourceTree = "<group>";
+		};
+		4DD8F1801EBF1A7C005C2607 /* References */ = {
+			isa = PBXGroup;
+			children = (
+				4DD8F17F1EBF1A76005C2607 /* Assignment Brief.pdf */,
+			);
+			name = References;
+			sourceTree = "<group>";
+		};
+		4DD8F1811EBF1A88005C2607 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				4DD8F17D1EBF176F005C2607 /* IDS.hpp */,
+			);
+			name = Headers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

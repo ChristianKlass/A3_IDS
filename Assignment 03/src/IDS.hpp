@@ -10,5 +10,13 @@
 #define IDS_hpp
 
 #include <stdio.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+
+int init();
+int readEntry(std::string);
+
+std::string entryFile = "Entry.txt";
 
 #endif /* IDS_hpp */
