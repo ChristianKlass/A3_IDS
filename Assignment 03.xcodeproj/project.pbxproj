@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4DD8F17E1EBF176F005C2607 /* IDS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4DD8F17C1EBF176F005C2607 /* IDS.cpp */; };
+		4DD8F1841EBF1CB0005C2607 /* Entry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4DD8F1821EBF1CB0005C2607 /* Entry.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +28,8 @@
 		4DD8F17C1EBF176F005C2607 /* IDS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IDS.cpp; path = src/IDS.cpp; sourceTree = "<group>"; };
 		4DD8F17D1EBF176F005C2607 /* IDS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IDS.hpp; path = src/IDS.hpp; sourceTree = "<group>"; };
 		4DD8F17F1EBF1A76005C2607 /* Assignment Brief.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Assignment Brief.pdf"; sourceTree = "<group>"; };
+		4DD8F1821EBF1CB0005C2607 /* Entry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Entry.cpp; path = src/Entry.cpp; sourceTree = "<group>"; };
+		4DD8F1831EBF1CB0005C2607 /* Entry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Entry.hpp; path = src/Entry.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,9 +62,10 @@
 		4DD8F1741EBF172A005C2607 /* Assignment 03 */ = {
 			isa = PBXGroup;
 			children = (
-				4DD8F1801EBF1A7C005C2607 /* References */,
+				4DD8F1821EBF1CB0005C2607 /* Entry.cpp */,
 				4DD8F17C1EBF176F005C2607 /* IDS.cpp */,
 				4DD8F1811EBF1A88005C2607 /* Headers */,
+				4DD8F1801EBF1A7C005C2607 /* References */,
 			);
 			path = "Assignment 03";
 			sourceTree = "<group>";
@@ -77,6 +81,7 @@
 		4DD8F1811EBF1A88005C2607 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				4DD8F1831EBF1CB0005C2607 /* Entry.hpp */,
 				4DD8F17D1EBF176F005C2607 /* IDS.hpp */,
 			);
 			name = Headers;
@@ -140,6 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DD8F1841EBF1CB0005C2607 /* Entry.cpp in Sources */,
 				4DD8F17E1EBF176F005C2607 /* IDS.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
