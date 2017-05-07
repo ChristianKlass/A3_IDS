@@ -20,8 +20,7 @@ int init() {
 		//if this fails, return EXIT_FAILURE and quit the program.
 	int success = EXIT_SUCCESS;
 	
-	if (		!readEntry(entryFile) ||
-			!read) success = EXIT_FAILURE;
+	if (		!readEntry(entryFile) ) success = EXIT_FAILURE;
 	
 	
 	return success;
