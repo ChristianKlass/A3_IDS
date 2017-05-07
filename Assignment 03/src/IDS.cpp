@@ -20,8 +20,9 @@ int init() {
 		//if this fails, return EXIT_FAILURE and quit the program.
 	int success = EXIT_SUCCESS;
 	
-	if (		!readEntry(entryFile) ) success = EXIT_FAILURE;
-	
+		//if either of these conditions fail, do not continue with the program.
+	if (	 !readEntry(entryFile) || !readStats(statsFile) )
+		success = EXIT_FAILURE;
 	
 	return success;
 }
@@ -33,10 +34,51 @@ int readEntry(std::string filename) {
 	
 	if (!infile) {
 		infile.close();
+		std::cout 	<< "Failed to read " << filename << "! Exiting.." << std::endl;
 		success = EXIT_FAILURE;
 	} else {
 			//do something else;
+		std::string line;
+		while (infile >> line) {
+			
+		}
+		
+		infile.close();
 	}
 	
 	return success;
 }
+
+int readStats(std::string filename) {
+	int success = EXIT_SUCCESS;
+	
+	std::fstream infile (filename, std::ios::in);
+	
+	if (!infile) {
+		infile.close();
+		std::cout 	<< "Failed to read " << filename << "! Exiting.." << std::endl;
+		success = EXIT_FAILURE;
+	} else {
+			//do something else;
+		std::string line;
+		while (infile >> line) {
+			
+		}
+		
+		infile.close();
+	}
+	
+	return success;
+}
+
+
+
+
+
+
+
+
+
+
+
+
