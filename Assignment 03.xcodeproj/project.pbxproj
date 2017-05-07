@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4DD8F1761EBF172B005C2607 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4DD8F1751EBF172B005C2607 /* main.cpp */; };
+		4DD8F17E1EBF176F005C2607 /* IDS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4DD8F17C1EBF176F005C2607 /* IDS.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +24,8 @@
 
 /* Begin PBXFileReference section */
 		4DD8F1721EBF172A005C2607 /* Assignment 03 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Assignment 03"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4DD8F1751EBF172B005C2607 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		4DD8F17C1EBF176F005C2607 /* IDS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IDS.cpp; path = src/IDS.cpp; sourceTree = "<group>"; };
+		4DD8F17D1EBF176F005C2607 /* IDS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IDS.hpp; path = src/IDS.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +58,8 @@
 		4DD8F1741EBF172A005C2607 /* Assignment 03 */ = {
 			isa = PBXGroup;
 			children = (
-				4DD8F1751EBF172B005C2607 /* main.cpp */,
+				4DD8F17C1EBF176F005C2607 /* IDS.cpp */,
+				4DD8F17D1EBF176F005C2607 /* IDS.hpp */,
 			);
 			path = "Assignment 03";
 			sourceTree = "<group>";
@@ -120,7 +122,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4DD8F1761EBF172B005C2607 /* main.cpp in Sources */,
+				4DD8F17E1EBF176F005C2607 /* IDS.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
