@@ -38,6 +38,10 @@ int readEntry(std::string filename) {
 		success = EXIT_FAILURE;
 	} else {
 			//do something else;
+		int count;
+		infile >> count;
+		infile.ignore(256, '\n');
+		
 		std::string line;
 		while (infile >> line) {
 			
@@ -60,6 +64,10 @@ int readStats(std::string filename) {
 		success = EXIT_FAILURE;
 	} else {
 			//do something else;
+		int count;
+		infile >> count;
+		infile.ignore(256, '\n');
+		
 		std::string line;
 		while (infile >> line) {
 			
