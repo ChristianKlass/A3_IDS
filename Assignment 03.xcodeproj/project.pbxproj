@@ -26,7 +26,7 @@
 
 /* Begin PBXFileReference section */
 		4D7CEE8A1EC1879F00427CB6 /* Events.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Events.txt; path = src/Events.txt; sourceTree = "<group>"; };
-		4D7CEE8B1EC187DB00427CB6 /* Stats.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Stats.txt; sourceTree = "<group>"; };
+		4D7CEE8C1EC1885C00427CB6 /* Stats.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Stats.txt; path = src/Stats.txt; sourceTree = "<group>"; };
 		4DD8F1721EBF172A005C2607 /* Assignment 03 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Assignment 03"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DD8F17C1EBF176F005C2607 /* IDS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IDS.cpp; path = src/IDS.cpp; sourceTree = "<group>"; };
 		4DD8F17D1EBF176F005C2607 /* IDS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IDS.hpp; path = src/IDS.hpp; sourceTree = "<group>"; };
@@ -73,7 +73,7 @@
 				4DD8F1811EBF1A88005C2607 /* Headers */,
 				4DD8F1801EBF1A7C005C2607 /* References */,
 				4D7CEE8A1EC1879F00427CB6 /* Events.txt */,
-				4D7CEE8B1EC187DB00427CB6 /* Stats.txt */,
+				4D7CEE8C1EC1885C00427CB6 /* Stats.txt */,
 			);
 			path = "Assignment 03";
 			sourceTree = "<group>";
