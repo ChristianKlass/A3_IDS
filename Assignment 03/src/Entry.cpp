@@ -7,7 +7,7 @@
 #include "Entry.hpp"
 
 Entry::Entry() {};
-Entry::Entry(std::string eventName, char CD, int min, int max, int weight) {
+Entry::Entry(std::string eventName, char CD, float min, float max, float weight) {
 	setEventName(eventName);
 	setCD(CD);
 	setMin(min);
@@ -33,6 +33,19 @@ void Entry::setWeight (int weight) {
 		std::cout 	<< "Defaulting to 1.\n";
 		
 		weight = 1;
+	}
+	
+	this->weight = weight;
+}
+
+void Entry::setMin (float min) { this->min = min; }
+void Entry::setMax (float max) { this->max = max; }
+void Entry::setWeight (float weight) {
+	if (weight < 0.01) {
+		std::cout 	<< "Weight cannot be less than 1!\n";
+		std::cout 	<< "Defaulting to 1.\n";
+		
+		weight = 0.01;
 	}
 	
 	this->weight = weight;

@@ -8,6 +8,7 @@
 #define IDS_hpp
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -17,8 +18,9 @@
 
 int init();
 int readEntry(std::string);
+int readStats(std::string);
 
-std::vector<Entry> entries;
+std::vector<Entry> events;
 std::vector<Stat> stats;
 
 std::string entryFile = "Events.txt";
