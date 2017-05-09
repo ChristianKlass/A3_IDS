@@ -71,6 +71,11 @@ std::string Entry::getEventName() { return this->eventName; }
 int Entry::getMin() { return this->min; };
 int Entry::getMax() { return this->max; };
 int Entry::getWeight() { return this->weight; };
+
+float Entry::getFMin() { return this->fMin; }
+float Entry::getFMax() { return this->fMax; }
+float Entry::getFWeight() { return this->fWeight; }
+
 std::string Entry::getCD() {
 	std::string answer;
 	
@@ -81,4 +86,13 @@ std::string Entry::getCD() {
 	}
 	
 	return answer;
-};
+}
+
+std::string Entry::toString() {
+	std::stringstream ss;
+	ss << this->getEventName() << " - " << this->getWeight();
+	
+	return ss.str();
+}
+
+

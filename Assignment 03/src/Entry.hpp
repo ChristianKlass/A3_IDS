@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
+#include <sstream>
 
 class Entry {
 private:
@@ -32,17 +33,22 @@ public:
 	void setMin(int);
 	void setMax(int);
 	void setWeight(int);
+	int getMin();
+	int getMax();
+	int getWeight();
 	
 	void setMin(float);
 	void setMax(float);
 	void setWeight(float);
+	float getFMin();
+	float getFMax();
+	float getFWeight();
 	
 	std::string getEventName();
 	std::string getCD();
-	int getMin();
-	int getMax();
-	int getWeight();
 		//accessors and mutators
+	
+	std::string toString();
 };
 
 #endif /* Entry_hpp */

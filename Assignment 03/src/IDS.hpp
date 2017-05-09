@@ -13,6 +13,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <cmath>
 #include "Entry.hpp"
 #include "Stat.hpp"
 #include "Log.hpp"
@@ -20,7 +21,6 @@
 int init();
 int readEntry(std::string);
 int readStats(std::string);
-Log generateLogEntry (Entry, Stat);
 
 std::vector<Entry> events;
 std::vector<Stat> stats;

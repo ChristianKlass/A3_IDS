@@ -9,6 +9,10 @@
 int main (int argc, char** argv) {
 	if (init() == EXIT_FAILURE) return EXIT_FAILURE;
 	
+	for (int i = 0; i < events.size(); ++i) {
+		std::cout 	<< events[i].toString() << std::endl;
+	}
+	
 	return EXIT_SUCCESS;
 }
 
@@ -17,6 +21,7 @@ int init() {
 		//read files, set up stuff, etc.
 		//if this fails, return EXIT_FAILURE and quit the program.
 	int success = EXIT_SUCCESS;
+	srand((int)time(NULL));
 	
 		//if either of these conditions fail, do not continue with the program.
 	if (	 readEntry(entryFile) == EXIT_FAILURE || readStats(statsFile) == EXIT_FAILURE )
@@ -115,13 +120,6 @@ int readStats(std::string filename) {
 	}
 	
 	return success;
-}
-
-Log generateLogEntry(Entry entry, Stat stat) {
-	Log log ;
-	
-	
-	return log;
 }
 
 

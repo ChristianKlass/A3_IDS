@@ -24,6 +24,8 @@ private:
 public:
 	Log();
 	Log(std::string eventName, float value, float weight);
+	
+	Log(std::string eventName, int value, int weight);
 	~Log();
 	
 	std::string getEventName();
