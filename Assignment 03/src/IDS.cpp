@@ -7,7 +7,7 @@
 #include "IDS.hpp"
 
 int main (int argc, char** argv) {
-	if (!init()) return EXIT_FAILURE;
+	if (init() == EXIT_FAILURE) return EXIT_FAILURE;
 	
 	return EXIT_SUCCESS;
 }
@@ -40,8 +40,6 @@ int readEntry(std::string filename) {
 		infile >> count;
 		infile.ignore(256, '\n');
 		
-		std::cout 	<< "Count -> " << count << std::endl;
-		
 		std::string line, delim = ":";
 		while (std::getline(infile, line) ) {
 				//std::cout 	<< "Line -> " << line << std::endl;
@@ -72,7 +70,7 @@ int readEntry(std::string filename) {
 						<< "Number of events:\t" << events.size() << std::endl
 						<< "Count provided:\t" << count << std::endl;
 		} else {
-			std::cout 	<< events.size() << " entries found in " << filename << "!\n" << std::endl;
+			std::cout 	<< events.size() << " entries found in " << filename << "!  Added to memory!" << std::endl;
 		}
 	}
 	
@@ -93,8 +91,6 @@ int readStats(std::string filename) {
 		infile >> count;
 		infile.ignore(256, '\n');
 		
-		std::cout 	<< "Count -> " << count << std::endl;
-		
 		std::string line, delim = ":";
 		while (std::getline(infile, line) ) {
 			std::vector<std::string> tokens = tokenize(line, delim);
@@ -114,11 +110,18 @@ int readStats(std::string filename) {
 			<< "Num of stats:\t" << stats.size() << std::endl
 			<< "Count provided:\t" << count << std::endl;
 		} else {
-			std::cout 	<< stats.size() << " stats found in " << filename << "!\n" << std::endl;
+			std::cout 	<< stats.size() << " stats found in " << filename << "!  Added to memory!" << std::endl;
 		}
 	}
 	
 	return success;
+}
+
+Log generateLogEntry(Entry entry, Stat stat) {
+	Log log ;
+	
+	
+	return log;
 }
 
 

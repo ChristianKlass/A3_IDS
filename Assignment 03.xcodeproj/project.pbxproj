@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4D7CEE8E1EC1892000427CB6 /* makefile in Sources */ = {isa = PBXBuildFile; fileRef = 4D7CEE8D1EC1892000427CB6 /* makefile */; };
+		4D7CEE911EC1B72E00427CB6 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D7CEE8F1EC1B72E00427CB6 /* Log.cpp */; };
 		4DD8F17E1EBF176F005C2607 /* IDS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4DD8F17C1EBF176F005C2607 /* IDS.cpp */; };
 		4DD8F1841EBF1CB0005C2607 /* Entry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4DD8F1821EBF1CB0005C2607 /* Entry.cpp */; };
 		4DD8F1871EBF6843005C2607 /* Stat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4DD8F1851EBF6843005C2607 /* Stat.cpp */; };
@@ -29,6 +30,8 @@
 		4D7CEE8A1EC1879F00427CB6 /* Events.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Events.txt; path = src/Events.txt; sourceTree = "<group>"; };
 		4D7CEE8C1EC1885C00427CB6 /* Stats.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Stats.txt; path = src/Stats.txt; sourceTree = "<group>"; };
 		4D7CEE8D1EC1892000427CB6 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = makefile; path = src/makefile; sourceTree = "<group>"; };
+		4D7CEE8F1EC1B72E00427CB6 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Log.cpp; path = src/Log.cpp; sourceTree = "<group>"; };
+		4D7CEE901EC1B72E00427CB6 /* Log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Log.hpp; path = src/Log.hpp; sourceTree = "<group>"; };
 		4DD8F1721EBF172A005C2607 /* Assignment 03 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Assignment 03"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DD8F17C1EBF176F005C2607 /* IDS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IDS.cpp; path = src/IDS.cpp; sourceTree = "<group>"; };
 		4DD8F17D1EBF176F005C2607 /* IDS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IDS.hpp; path = src/IDS.hpp; sourceTree = "<group>"; };
@@ -69,6 +72,7 @@
 		4DD8F1741EBF172A005C2607 /* Assignment 03 */ = {
 			isa = PBXGroup;
 			children = (
+				4D7CEE8F1EC1B72E00427CB6 /* Log.cpp */,
 				4DD8F1821EBF1CB0005C2607 /* Entry.cpp */,
 				4DD8F17C1EBF176F005C2607 /* IDS.cpp */,
 				4DD8F1851EBF6843005C2607 /* Stat.cpp */,
@@ -92,6 +96,7 @@
 		4DD8F1811EBF1A88005C2607 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				4D7CEE901EC1B72E00427CB6 /* Log.hpp */,
 				4DD8F1831EBF1CB0005C2607 /* Entry.hpp */,
 				4DD8F17D1EBF176F005C2607 /* IDS.hpp */,
 				4DD8F1861EBF6843005C2607 /* Stat.hpp */,
@@ -158,6 +163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4DD8F1871EBF6843005C2607 /* Stat.cpp in Sources */,
+				4D7CEE911EC1B72E00427CB6 /* Log.cpp in Sources */,
 				4DD8F1841EBF1CB0005C2607 /* Entry.cpp in Sources */,
 				4D7CEE8E1EC1892000427CB6 /* makefile in Sources */,
 				4DD8F17E1EBF176F005C2607 /* IDS.cpp in Sources */,
