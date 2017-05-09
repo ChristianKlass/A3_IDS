@@ -2,8 +2,6 @@
 //  IDS.cpp
 //  Assignment 03
 //
-//  Created by Mark Klass on 7/5/17.
-//  Copyright © 2017 Juicy Apps. All rights reserved.
 //
 
 #include "IDS.hpp"
@@ -21,7 +19,7 @@ int init() {
 	int success = EXIT_SUCCESS;
 	
 		//if either of these conditions fail, do not continue with the program.
-	if (	 !readEntry(entryFile) || !readStats(statsFile) )
+	if (	 !readEntry(entryFile) )
 		success = EXIT_FAILURE;
 	
 	return success;
@@ -42,34 +40,11 @@ int readEntry(std::string filename) {
 		infile >> count;
 		infile.ignore(256, '\n');
 		
-		std::string line;
-		while (infile >> line) {
-			
-		}
-		
-		infile.close();
-	}
-	
-	return success;
-}
-
-int readStats(std::string filename) {
-	int success = EXIT_SUCCESS;
-	
-	std::fstream infile (filename, std::ios::in);
-	
-	if (!infile) {
-		infile.close();
-		std::cout 	<< "Failed to read " << filename << "! Exiting.." << std::endl;
-		success = EXIT_FAILURE;
-	} else {
-			//do something else;
-		int count;
-		infile >> count;
-		infile.ignore(256, '\n');
+		std::cout 	<< "Count -> " << count << std::endl;
 		
 		std::string line;
-		while (infile >> line) {
+		while (std::getline(infile, line) ) {
+			std::cout 	<< "Line -> " << line << std::endl;
 			
 		}
 		

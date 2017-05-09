@@ -2,8 +2,6 @@
 //  Entry.cpp
 //  Assignment 03
 //
-//  Created by Mark Klass on 7/5/17.
-//  Copyright © 2017 Juicy Apps. All rights reserved.
 //
 
 #include "Entry.hpp"
@@ -16,6 +14,8 @@ Entry::Entry(std::string eventName, char CD, int min, int max, int weight) {
 	setMax(max);
 	setWeight(weight);
 }
+
+Entry::~Entry() {}
 
 void Entry::setEventName (std::string eName) { this->eventName = eName;  }
 void Entry::setMin (int min) { this->min = min; }

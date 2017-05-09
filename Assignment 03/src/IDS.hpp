@@ -2,8 +2,6 @@
 //  IDS.hpp
 //  Assignment 03
 //
-//  Created by Mark Klass on 7/5/17.
-//  Copyright © 2017 Juicy Apps. All rights reserved.
 //
 
 #ifndef IDS_hpp
@@ -19,12 +17,11 @@
 
 int init();
 int readEntry(std::string);
-int readStats(std::string);
 
 std::vector<Entry> entries;
 std::vector<Stat> stats;
 
-std::string entryFile = "Entry.txt";
+std::string entryFile = "Events.txt";
 std::string statsFile = "Stats.txt";
 
 template<typename T>
