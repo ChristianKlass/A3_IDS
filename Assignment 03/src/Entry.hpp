@@ -19,8 +19,10 @@ private:
 	
 public:
 	Entry();
+		//for C
 	Entry(std::string eventName, char CD, int min, int max, int weight);
-	
+		//for D
+	Entry(std::string eventName, char CD, int min, int weight);
 	~Entry();
 	
 		//accessors and mutators

@@ -15,6 +15,13 @@ Entry::Entry(std::string eventName, char CD, int min, int max, int weight) {
 	setWeight(weight);
 }
 
+Entry::Entry(std::string eventName, char CD, int min, int weight) {
+	setEventName(eventName);
+	setCD(CD);
+	setMin(min);
+	setWeight(weight);
+}
+
 Entry::~Entry() {}
 
 void Entry::setEventName (std::string eName) { this->eventName = eName;  }
