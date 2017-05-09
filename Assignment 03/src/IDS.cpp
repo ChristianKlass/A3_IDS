@@ -97,19 +97,13 @@ int readStats(std::string filename) {
 		
 		std::string line, delim = ":";
 		while (std::getline(infile, line) ) {
-			std::cout 	<< line << std::endl;
 			std::vector<std::string> tokens = tokenize(line, delim);
 			
 			float mean = atof( tokens[1].c_str() );
 			float standardDeviation = atof( tokens[1].c_str() );
 			
-			std::cout 	<< mean << " && " << standardDeviation << std::endl;
 			Stat temp (tokens[0], mean, standardDeviation);
 			stats.push_back(temp);
-		}
-		
-		for (int i = 0; i < stats.size(); ++i) {
-			std::cout 	<< stats[i].getEventName() << std::endl;
 		}
 		
 		infile.close();
