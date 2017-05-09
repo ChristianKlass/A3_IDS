@@ -28,7 +28,7 @@ int init() {
 int readEntry(std::string filename) {
 	int success = EXIT_SUCCESS;
 	
-	std::fstream infile (filename, std::ios::in);
+	std::fstream infile (filename.c_str(), std::ios::in);
 	
 	if (!infile) {
 		infile.close();
@@ -81,7 +81,7 @@ int readEntry(std::string filename) {
 
 int readStats(std::string filename) {
 	int success = EXIT_SUCCESS;
-	std::fstream infile (filename);
+	std::fstream infile (filename.c_str(), std::ios::in);
 	
 	if (!infile) {
 		infile.close();
