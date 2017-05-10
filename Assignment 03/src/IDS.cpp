@@ -1,38 +1,44 @@
 //
 //  IDS.cpp
-//  Assignment 03
+//  A3 IDS
 //
 //
 
 #include "IDS.hpp"
 
 int main (int argc, char** argv) {
-	if (init() == EXIT_FAILURE) return EXIT_FAILURE;
-	
-	for (int i = 0; i < events.size(); ++i) {
-		std::cout 	<< events[i].toString() << std::endl;
-	}
-	
+	init();
 	return EXIT_SUCCESS;
 }
 
 int init() {
-		//initialize everything
-		//read files, set up stuff, etc.
-		//if this fails, return EXIT_FAILURE and quit the program.
 	int success = EXIT_SUCCESS;
-	srand((int)time(NULL));
 	
-		//if either of these conditions fail, do not continue with the program.
-	if (	 readEntry(entryFile) == EXIT_FAILURE || readStats(statsFile) == EXIT_FAILURE )
+		//if any of these conditions fail
+	if (		readEntry(entryFile) == EXIT_FAILURE
+		|| 	readStats(statsFile) == EXIT_FAILURE) {
 		success = EXIT_FAILURE;
+	}
+	
+	std::cout 	<< "Events\t-> " 	<< events.size() << std::endl;
+	std::cout 	<< "Stats\t-> " 		<< stats.size() << std::endl;
+	
+		//have to use dynamic_cast or it won't work properly.
+//	for (std::vector<Event*>::iterator it = events.begin(); it != events.end(); ++it) {
+//		if ((*it)->getCD() == 'C') {
+//			ContinuousEvent c = *dynamic_cast<ContinuousEvent*>(*(it));
+//			std::cout 	<< c.getMax() << std::endl;
+//		} else if ((*it)->getCD() == 'D') {
+//			DiscreteEvent d = *dynamic_cast<DiscreteEvent*>(*(it));
+//			std::cout 	<< d.getWeight() << " - " << d.getMin() << std::endl;
+//		}
+//	}
 	
 	return success;
 }
 
 int readEntry(std::string filename) {
 	int success = EXIT_SUCCESS;
-	
 	std::fstream infile (filename.c_str(), std::ios::in);
 	
 	if (!infile) {
@@ -40,42 +46,30 @@ int readEntry(std::string filename) {
 		std::cout 	<< "Failed to read " << filename << "! Exiting.." << std::endl;
 		success = EXIT_FAILURE;
 	} else {
-			//do something else;
 		int count;
 		infile >> count;
 		infile.ignore(256, '\n');
 		
 		std::string line, delim = ":";
 		while (std::getline(infile, line) ) {
-				//std::cout 	<< "Line -> " << line << std::endl;
-			
 			std::vector<std::string> tokens = tokenize(line, delim);
+			std::string eventName = tokens[0];
 			
 			if (tokens[1] == "D") {
-				int min = atoi( tokens[2].c_str() );
-				int weight = atoi ( tokens[4].c_str() );
 				char CD = 'D';
-				Entry temp (tokens[0], CD, min, weight);
-				events.push_back(temp);
-			} else {
+				int min = atoi(tokens[2].c_str()),
+					max = atoi(tokens[3].c_str()),
+					weight = atoi(tokens[4].c_str());
+	
+				events.push_back(new DiscreteEvent(eventName, CD, weight, min, max));
+			} else if (tokens[1] == "C") {
 				char CD = 'C';
-				float min = atof( tokens[2].c_str() );
-				float max = atof( tokens[3].c_str() );
-				float weight = atof( tokens[4].c_str() );
-				Entry temp (tokens[0], CD, min, max, weight);
-				events.push_back(temp);
+				float	min = atof(tokens[2].c_str()),
+						max = atof(tokens[3].c_str());
+				int 	weight = atoi(tokens[4].c_str());
+				
+				events.push_back(new ContinuousEvent(eventName, CD, weight, min, max));
 			}
-		}
-		
-		infile.close();
-		
-		if (count != events.size()) {
-			success = EXIT_FAILURE;
-			std::cout 	<< "Number of events does not tally with count!" << std::endl
-						<< "Number of events:\t" << events.size() << std::endl
-						<< "Count provided:\t" << count << std::endl;
-		} else {
-			std::cout 	<< events.size() << " entries found in " << filename << "!  Added to memory!" << std::endl;
 		}
 	}
 	
@@ -91,35 +85,34 @@ int readStats(std::string filename) {
 		std::cout 	<< "Failed to read " << filename << "! Exiting.." << std::endl;
 		success = EXIT_FAILURE;
 	} else {
-			//do something else;
-		int count = 0;
+		int count;
 		infile >> count;
 		infile.ignore(256, '\n');
 		
 		std::string line, delim = ":";
 		while (std::getline(infile, line) ) {
 			std::vector<std::string> tokens = tokenize(line, delim);
+			std::string eventName = tokens[0];
+			float mean, standardDeviation;
+			mean = atof(tokens[1].c_str());
+			standardDeviation = atof(tokens[2].c_str());
 			
-			float mean = atof( tokens[1].c_str() );
-			float standardDeviation = atof( tokens[1].c_str() );
-			
-			Stat temp (tokens[0], mean, standardDeviation);
-			stats.push_back(temp);
-		}
-		
-		infile.close();
-		
-		if (count != stats.size()) {
-			success = EXIT_FAILURE;
-			std::cout 	<< "Number of statistics does not tally with count!" << std::endl
-			<< "Num of stats:\t" << stats.size() << std::endl
-			<< "Count provided:\t" << count << std::endl;
-		} else {
-			std::cout 	<< stats.size() << " stats found in " << filename << "!  Added to memory!" << std::endl;
+			Stat tempS (eventName, mean, standardDeviation);
+			stats.push_back(tempS);
 		}
 	}
 	
 	return success;
+}
+
+Log generateLogEntry(ContinuousEvent event, Stat stat) {
+	std::string eventName = event.getEventName();
+	int weight = event.getWeight();
+	float value = 5.0;
+	
+	Log log(eventName, value, weight);
+	
+	return log;
 }
 
 

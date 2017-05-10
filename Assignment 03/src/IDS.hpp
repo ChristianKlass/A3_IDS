@@ -1,6 +1,6 @@
 //
 //  IDS.hpp
-//  Assignment 03
+//  A3 IDS
 //
 //
 
@@ -14,17 +14,20 @@
 #include <vector>
 #include <string>
 #include <cmath>
-#include "Entry.hpp"
+#include "Event.hpp"
+#include "ContinuousEvent.hpp"
+#include "DiscreteEvent.hpp"
 #include "Stat.hpp"
 #include "Log.hpp"
 
 int init();
 int readEntry(std::string);
 int readStats(std::string);
+Log generateLogEntry(ContinuousEvent, Stat);
+Log generateLogEntry(DiscreteEvent, Stat);
 
-std::vector<Entry> events;
+std::vector<Event*> events;
 std::vector<Stat> stats;
-std::vector<Log> logs;
 
 std::string entryFile = "Events.txt";
 std::string statsFile = "Stats.txt";
@@ -42,7 +45,7 @@ std::vector<T> tokenize(const T & str, const T & delimiter) {
 		pos = str.find(delimiter, pos);
 		
 		if (pos == std::string::npos)
-		tokens.push_back(str.substr(i, str.length()));
+			tokens.push_back(str.substr(i, str.length()));
 	}
 	
 	return tokens;

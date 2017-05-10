@@ -1,14 +1,14 @@
-//
-//  Log.cpp
-//  Assignment 03
-//
-//
+	//
+	//  Log.cpp
+	//  Assignment 03
+	//
+	//
 
 #include "Log.hpp"
 
 Log::Log() {};
 
-Log::Log(std::string eventName, float value, float weight){
+Log::Log(std::string eventName, float value, int weight){
 	setEventName(eventName);
 	setValue(value);
 	setWeight(weight);
@@ -16,11 +16,9 @@ Log::Log(std::string eventName, float value, float weight){
 
 Log::Log(std::string eventName, int value, int weight){
 	setEventName(eventName);
-	
 	float v = value * 1.0;
-	float w = weight * 1.0;
 	setValue(v);
-	setWeight(w);
+	setWeight(weight);
 }
 
 Log::~Log() {}
@@ -33,7 +31,7 @@ void Log::setValue(float value){
 	this->value = value;
 }
 
-void Log::setWeight(float weight){
+void Log::setWeight(int weight){
 	this->weight = weight;
 }
 
@@ -45,6 +43,6 @@ float Log::getValue(){
 	return this->value;
 }
 
-float Log::getWeight(){
+int Log::getWeight(){
 	return this->weight;
 }
