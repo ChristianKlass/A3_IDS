@@ -2,8 +2,6 @@
 //  DiscreteEvent.cpp
 //  A3 IDS
 //
-//  Created by Mark Klass on 10/5/17.
-//  Copyright © 2017 Juicy Apps. All rights reserved.
 //
 
 #include "DiscreteEvent.hpp"

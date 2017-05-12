@@ -25,6 +25,7 @@ Log.o: Log.cpp Log.hpp
 clean:
 	@\rm *.o
 	@\rm IDS
+	@\rm *.log
 	@echo "Directory cleaned."
 
 run:

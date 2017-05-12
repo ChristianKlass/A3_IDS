@@ -7,6 +7,7 @@
 #ifndef IDS_hpp
 #define IDS_hpp
 
+#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -14,6 +15,7 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <iomanip>
 #include "Event.hpp"
 #include "ContinuousEvent.hpp"
 #include "DiscreteEvent.hpp"
@@ -23,11 +25,21 @@
 int init();
 int readEntry(std::string);
 int readStats(std::string);
-Log generateLogEntry(ContinuousEvent, Stat);
-Log generateLogEntry(DiscreteEvent, Stat);
+//Log generateLogEntry(ContinuousEvent, Stat);
+//Log generateLogEntry(DiscreteEvent, Stat);
+void generateLogEntry(Event*, Stat*, std::vector<Log*>&);
+bool withinStatisticC(float, double, double);
+bool withinStatisticD(int, int, int);
+double generateValue(double, double);
 
 std::vector<Event*> events;
-std::vector<Stat> stats;
+std::vector<Stat*> stats;
+//std::vector<Log*> logs;
+std::vector< std::vector<Log*> > logSheet;
+//std::vector< std::vector<Log*> > allLogs;
+
+float findMean(std::vector<int>);
+float findVariance(std::vector<int>, int);
 
 std::string entryFile = "Events.txt";
 std::string statsFile = "Stats.txt";
