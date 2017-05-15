@@ -11,7 +11,7 @@ int main (int argc, char** argv) {
 
 	srand((int)time(NULL));
 
-	int numberOfLogs = 5;
+	int numberOfLogs = 1000;
 
 	//DAILY LOG GENERATION //5 DAYS FOR NOW
 	//NEED TO UPDATE DEPENDING ON USER INPUT
@@ -27,7 +27,6 @@ int main (int argc, char** argv) {
 	}//END DAILY LOG GENERATION
 
 	//READING OF LOGSHEET
-	std::string logFile = "Daily.log";
 	std::fstream outFile(logFile.c_str(), std::ios::out);
 	
 	if (!outFile) {
@@ -35,7 +34,7 @@ int main (int argc, char** argv) {
 		std::cout << "\n*****" << logFile << " failed to open for data writing*****" << std::endl;
 	} else {
 		for (int days = 0; days < logSheet.size(); ++days) {
-			outFile << "~~~ Day " << days + 1 << "~~~" << std::endl;
+			outFile << "~~~ Day " << days + 1 << " ~~~" << std::endl;
 			std::stringstream data;
 			data.str("");
 			
@@ -45,7 +44,6 @@ int main (int argc, char** argv) {
 				data << logSheet[days][i]->getCD() << ":";
 				
 				if ( logSheet[days][i]->getCD() == 'C' ) {
-					std::cout 	<< "Pres\n";
 					data << std::setprecision(2) << std::fixed << logSheet[days][i]->getValue() << ":";
 				} else {
 					data << std::setprecision(0) << std::fixed << logSheet[days][i]->getValue() << ":";
@@ -59,6 +57,18 @@ int main (int argc, char** argv) {
 		
 		outFile.close();
 	}
+	
+	readLogs(logFile);
+	
+	std::cout 	<< "Mean of Logins          -> " << findMean(dailyLoginCount) << std::endl;
+	std::cout 	<< "Mean of Time Online     -> " << findMean(dailyTimeOnline) << std::endl;
+	std::cout 	<< "Mean of Emails Sent     -> " << findMean(dailyEmailsSent) << std::endl;
+	std::cout 	<< "Mean of Emails Received -> " << findMean(dailyEmailsRecv) << std::endl;
+	
+	std::cout 	<< "SD of Logins          -> " << sqrt(findVariance(dailyLoginCount, findMean(dailyLoginCount))) << std::endl;
+	std::cout 	<< "SD of Time Online     -> " << sqrt(findVariance(dailyTimeOnline, findMean(dailyTimeOnline))) << std::endl;
+	std::cout 	<< "SD of Emails Sent     -> " << sqrt(findVariance(dailyEmailsSent, findMean(dailyEmailsSent))) << std::endl;
+	std::cout 	<< "SD of Emails Received -> " << sqrt(findVariance(dailyEmailsRecv, findMean(dailyEmailsRecv))) << std::endl;
 	return EXIT_SUCCESS;
 }
 
@@ -97,9 +107,7 @@ int readEntry(std::string filename) {
 			if (tokens[1] == "D") {
 				char CD = 'D';
 				int min, max, weight;
-				/*int min = atoi(tokens[2].c_str());
-				max = atoi(tokens[3].c_str()),
-				weight = atoi(tokens[4].c_str());*/
+				
 				min = atoi(tokens[2].c_str());
 				if(tokens[3] == ""){
 					max = 9999;
@@ -109,16 +117,13 @@ int readEntry(std::string filename) {
 				}
 				weight = atoi(tokens[4].c_str());
 				std::cout << "MAX " << max << std::endl;//TEST
-//				std::cout 	<< "STORE D!\n";
 				events.push_back(new DiscreteEvent(eventName, CD, weight, min, max));
+				
 			} else if (tokens[1] == "C") {
 				char CD = 'C';
 				float min, max;
 				int weight;
-
-				/*float	min = atof(tokens[2].c_str()),
-				max = atof(tokens[3].c_str());
-				int 	weight = atoi(tokens[4].c_str());*/
+				
 				min = atoi(tokens[2].c_str());
 				if(tokens[3] == ""){
 					max = 9999.99;
@@ -158,9 +163,6 @@ int readStats(std::string filename) {
 			mean = atof(tokens[1].c_str());
 			standardDeviation = atof(tokens[2].c_str());
 
-			//Stat tempS (eventName, mean, standardDeviation);
-			//stats.push_back(tempS);
-
 			//TEST
 			stats.push_back(new Stat(eventName, mean, standardDeviation)); 
 		}
@@ -179,8 +181,6 @@ void generateLogEntry(Event* event, Stat* stat, std::vector<Log*> &dailyLog) {
 		double value;
 		ContinuousEvent cEvent = *dynamic_cast<ContinuousEvent*>(event);
 
-		//std::cout << "MIN - " << cEvent.getMin() << "MAX - " << cEvent.getMax() << std::endl;//TEST
-
 		do{
 			//Problem here, min and max can be zero and therefore DIV/0
 			//Set the value to 1 instead so that it makes sense
@@ -190,16 +190,11 @@ void generateLogEntry(Event* event, Stat* stat, std::vector<Log*> &dailyLog) {
 			}
 			else{
 				value = generateValue(stat->getMean(), stat->getStandardDeviation());
-				std::cout << "C VALUE -> " << value << std::endl;//TEST
 			}
 
 		}while(withinStatisticC(value, cEvent.getMin(), cEvent.getMax()) == false);
 
-		//return (new Log(eventName, value, weight));
 		dailyLog.push_back(new Log(eventName, event->getCD(), value, weight));
-		//std::cout << dailyLog.size() << std::endl;
-
-		//std::cout << value << std::endl; //TEST
 	}
 	
 	if(event->getCD() == 'D'){
@@ -221,8 +216,8 @@ void generateLogEntry(Event* event, Stat* stat, std::vector<Log*> &dailyLog) {
 			}*/
 			value = generateValue(stat->getMean(), stat->getStandardDeviation());
 			value = (int) value;
-			std::cout << "D VALUE -> " << value << std::endl;//TEST
-			std::cout << "MIN " << dEvent.getMin() << " MAX " << dEvent.getMax() << std::endl;
+//			std::cout << "D VALUE -> " << value << std::endl;//TEST
+//			std::cout << "MIN " << dEvent.getMin() << " MAX " << dEvent.getMax() << std::endl;
 
 		}while(withinStatisticD(value, dEvent.getMin(), dEvent.getMax()) == false);
 
@@ -240,7 +235,7 @@ bool withinStatisticD(int value, int min, int max){
 	//If value is greater than mean-SD and value is smaller than mean+SD
 	if(value >= min && value <= max){
 			//std::cout << "OK" << std::endl;//TEST
-		std::cout 	<< "withinStatisticD\n";
+//		std::cout 	<< "withinStatisticD\n";
 		return true;
 	}
 	
@@ -252,7 +247,7 @@ bool withinStatisticC(float value, double min, double max){
 	//If value is greater than mean-SD and value is smaller than mean+SD
 	if(value >= min && value <= max){
 			//std::cout << "OK" << std::endl;//TEST
-		std::cout 	<< "withinStatisticC\n";
+//		std::cout 	<< "withinStatisticC\n";
 		return true;
 	}
 
@@ -300,17 +295,30 @@ float findMean(std::vector<int> numbers) {
 	return total;
 }
 
-float findVariance (std::vector<int> numbers, float mean) {
+float findMean(std::vector<float> numbers) {
+	float total = 0;
+	int count = 0;
+	for (std::vector<float>::iterator it = numbers.begin(); it != numbers.end(); ++it) {
+		total += *it;
+		
+		++count;
+	}
+	
+	total = total / count;
+	return total;
+}
+
+float findVariance (std::vector<float> numbers, float mean) {
 	float variance = 0.0;
 	int count = 0;
 	
-	for (std::vector<int>::iterator it = numbers.begin(); it != numbers.end(); ++it) {
+	for (std::vector<float>::iterator it = numbers.begin(); it != numbers.end(); ++it) {
 		float temp = *it - mean;
 		
 		if (temp > 0) {
-			std::cout 	<< "(" << temp << ")^2 = ";
+				//std::cout 	<< "(" << temp << ")^2 = ";
 			temp = (temp * temp);
-			std::cout 	<< temp << std::endl;
+//			std::cout 	<< temp << std::endl;
 			variance += temp;
 		}
 		
@@ -322,11 +330,124 @@ float findVariance (std::vector<int> numbers, float mean) {
 	return variance;
 }
 
-/*
-void readLogs(std::vector < std::vector<Log*> > readLogs){
+float findVariance (std::vector<int> numbers, float mean) {
+	float variance = 0.0;
+	int count = 0;
 	
+	for (std::vector<int>::iterator it = numbers.begin(); it != numbers.end(); ++it) {
+		float temp = *it - mean;
+		
+		if (temp > 0) {
+				//std::cout 	<< "(" << temp << ")^2 = ";
+			temp = (temp * temp);
+//			std::cout 	<< temp << std::endl;
+			variance += temp;
+		}
+		
+		++count;
+	}
+	variance *= 2;
+	variance = variance / count;
+	
+	return variance;
 }
 
-Stat generateNewStat(std::vector < std::vector<Log*> > logSheet){
+void readLogs(std::string filename) {
+	std::fstream infile (filename.c_str(), std::ios::in);
+	
+	if (!infile) {
+		std::cout 	<< "Could not open " << filename << "! Please make sure it exists.\n";
+		infile.close();
+	} else {
+		std::string line, delim = ":";
+		std::stringstream ss;
+		ss.str("");
+		int day = 1;
+		
+		int login = 0, emailsSent = 0, emailsRecieved = 0;
+		float timeOnline = 0.0;
+		
+		ss << "~~~ Day " << day << " ~~~";
+		while (std::getline(infile, line)) {
+			if (line == ss.str()) {
+				std::cout 	<< "Processing information for day " << day++ << "!\n";
+				ss.str("");
+				ss << "~~~ Day " << day << " ~~~";
+			} else {
+				std::vector<std::string> tokens = tokenize(line, delim);
+				std::string eventName = tokens[0];
+				
+					//pop back because the last element is blank
+				tokens.pop_back();
+				
+				if (eventName == "Logins") {
+					login += atoi(tokens[2].c_str());
+					dailyLoginCount.push_back(atoi(tokens[2].c_str()));
+				} else if (eventName == "Time online") {
+					timeOnline += atof(tokens[2].c_str());
+					dailyTimeOnline.push_back(atof(tokens[2].c_str()));
+				} else if (eventName == "Emails sent") {
+					emailsSent += atoi(tokens[2].c_str());
+					dailyEmailsSent.push_back(atoi(tokens[2].c_str()));
+				} else if (eventName == "Emails opened") {
+					emailsRecieved += atoi(tokens[2].c_str());
+					dailyEmailsRecv.push_back(atoi(tokens[2].c_str()));
+				} else {
+					std::cout 	<< "Wrong name!\n";
+					break;
+				}
+				
+					//std::cout 	<< "Event -> " << eventName << "\n";
+			}
+		}
+		
+		std::cout 	<< "Total Logins -> " << login << std::endl
+		<< "Total Time Online -> " << timeOnline << std::endl
+		<< "Total Emails Sent -> " << emailsSent << std::endl
+		<< "Total Emails Recieved -> " << emailsRecieved << std::endl;
+		
+		infile.close();
+	}
+}
 
-}*/
+void compareStats() {
+	std::string newStatsFile;
+	std::cout 	<< "Please enter name of new Stats file: ";
+	std::getline(std::cin, newStatsFile);
+	
+	std::fstream infile (newStatsFile.c_str(), std::ios::in);
+	if (!infile) {
+		std::cout 	<< "Could not find " << newStatsFile << "! Please try again!\n";
+		infile.close();
+	} else {
+		int count;
+		std::string eventName;
+		float mean = 0.0, standardDeviation = 0.0, anomalyCount = 0.0;
+		infile >> count;
+		infile.ignore(256, '\n');
+		
+		std::string line, delim = ":";
+		
+			//reads the new stats file
+		while (std::getline(infile, line) ) {
+			std::vector<std::string> tokens = tokenize(line, delim);
+			eventName = tokens[0];
+			mean = atof(tokens[1].c_str());
+			standardDeviation = atof(tokens[2].c_str());
+			
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
