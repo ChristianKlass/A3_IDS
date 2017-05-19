@@ -29,22 +29,27 @@ void generateLogEntry(Event*, Stat*, std::vector<Log*>&);
 bool withinStatisticC(float, double, double);
 bool withinStatisticD(int, int, int);
 double generateValue(double, double);
-void writeLogFile(int);
+void writeLogFile(int, std::string);
 double findMean(std::vector<double>);
 double findVariance(std::vector<double>, double);
 void readLogs(std::string);
-void compareStats(std::string);
+	//void compareStats(std::string);
 void writeStats (std::vector<double>, std::vector<double>);
 void generateLogs(int);
 int generateLiveData();
-
+void generateLiveLogs(int);
+void writeLiveLogFile(int, std::string);
+void compareLogs(std::string, std::string);
 void doAnalysis(std::string dailyFile, std::string newStats);
+bool compareWithStats(std::vector<Log*>, std::vector<Stat*>);
 
 std::vector<Event*> events;
 std::vector<Stat*> stats; 
 std::vector<Log*> logs;
 std::vector< std::vector<Log*> > logSheet; //USED FOR STORING MULTIPLE DAILY LOGS
 std::vector<std::string> eventNames; //USED FOR READING LOG FILES
+std::vector<Stat*> liveData;
+std::vector<Log*> liveLogs;
 
 //keep track of the daily totals
 //helps in calculating mean, variance, and SD
@@ -53,9 +58,11 @@ std::vector<int> 	dailyEmailsSent;
 std::vector<int> 	dailyEmailsRecv;
 std::vector<float> 	dailyTimeOnline;
 
-std::string entryFile = "Events.txt";
+std::string eventFile = "Events.txt";
 std::string statsFile = "Stats.txt";
 std::string logFile = "Daily.log";
+int noOfDays = 100;
+std::string username = "Peter";
 	//chose to have a SINGLE log file that will detail the information from ALL days.
 
 template<typename T>
