@@ -27,6 +27,7 @@ public:
 	virtual int getWeight();
 	virtual char getCD();
 	
+	
 	virtual void setEventName(std::string);
 	virtual void setWeight(int);
 	virtual void setCD (char);

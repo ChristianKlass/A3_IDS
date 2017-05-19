@@ -16,15 +16,15 @@ private:
 	
 public:
 	ContinuousEvent();
-	ContinuousEvent(std::string eventName, char CD, int weight, float min, float max);
+	ContinuousEvent(std::string eventName, char CD, int weight, double min, double max);
 	
 	~ContinuousEvent();
 	
-	void setMin (float);
-	void setMax (float);
+	void setMin (double);
+	void setMax (double);
 	
-	virtual float getMin();
-	float getMax();
+	virtual double getMin();
+	double getMax();
 };
 
 #endif /* ContinuousEvent_hpp */

@@ -8,23 +8,23 @@
 
 ContinuousEvent::ContinuousEvent() {}
 ContinuousEvent::~ContinuousEvent() {}
-ContinuousEvent::ContinuousEvent(std::string eventName, char CD, int weight, float min, float max): Event(eventName, CD, weight) {
+ContinuousEvent::ContinuousEvent(std::string eventName, char CD, int weight, double min, double max): Event(eventName, CD, weight) {
 	setMin(min);
 	setMax(max);
 }
 
-void ContinuousEvent::setMin(float min) {
+void ContinuousEvent::setMin(double min) {
 	this->min = min;
 }
 
-void ContinuousEvent::setMax(float max) {
+void ContinuousEvent::setMax(double max) {
 	this->max = max;
 }
 
-float ContinuousEvent::getMin() {
+double ContinuousEvent::getMin() {
 	return this->min;
 }
 
-float ContinuousEvent::getMax() {
+double ContinuousEvent::getMax() {
 	return this->max;
 }

@@ -23,32 +23,35 @@
 #include "Log.hpp"
 
 int init();
-int readEntry(std::string);
+int readEvents(std::string);
 int readStats(std::string);
 void generateLogEntry(Event*, Stat*, std::vector<Log*>&);
 bool withinStatisticC(float, double, double);
 bool withinStatisticD(int, int, int);
 double generateValue(double, double);
+void writeLogFile(int);
+double findMean(std::vector<double>);
+double findVariance(std::vector<double>, double);
+void readLogs(std::string);
+void compareStats(std::string);
+void writeStats (std::vector<double>, std::vector<double>);
+void generateLogs(int);
+int generateLiveData();
+
+void doAnalysis(std::string dailyFile, std::string newStats);
 
 std::vector<Event*> events;
-std::vector<Stat*> stats;
-std::vector< std::vector<Log*> > logSheet;
+std::vector<Stat*> stats; 
+std::vector<Log*> logs;
+std::vector< std::vector<Log*> > logSheet; //USED FOR STORING MULTIPLE DAILY LOGS
+std::vector<std::string> eventNames; //USED FOR READING LOG FILES
 
-	//keep track of the daily totals
-	//helps in calculating mean, variance, and SD
+//keep track of the daily totals
+//helps in calculating mean, variance, and SD
 std::vector<int> 	dailyLoginCount;
 std::vector<int> 	dailyEmailsSent;
 std::vector<int> 	dailyEmailsRecv;
 std::vector<float> 	dailyTimeOnline;
-
-float findMean(std::vector<int>);
-float findMean(std::vector<float>);
-
-float findVariance(std::vector<int>, float);
-float findVariance(std::vector<float>, float);
-
-void readLogs(std::string);
-void compareStats(std::string);
 
 std::string entryFile = "Events.txt";
 std::string statsFile = "Stats.txt";

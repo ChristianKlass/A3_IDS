@@ -8,10 +8,16 @@
 
 Log::Log() {};
 
-Log::Log(std::string eventName, char cd, double value, int weight){
+/*Log::Log(std::string eventName, char cd, double value, int weight){
 	setEventName(eventName);
 	setCD(cd);
 	setValue(value);
+	setWeight(weight);
+}*/
+
+Log::Log(std::string eventName, char cd, int weight){
+	setEventName(eventName);
+	setCD(cd);
 	setWeight(weight);
 }
 
@@ -29,8 +35,8 @@ void Log::setEventName(std::string eventName){
 	this->eventName = eventName;
 }
 
-void Log::setValue(float value){
-	this->value = value;
+void Log::setValue(int index, double value){
+	this->values.push_back(value);
 }
 
 void Log::setWeight(int weight){
@@ -45,8 +51,8 @@ std::string Log::getEventName(){
 	return this->eventName;
 }
 
-float Log::getValue(){
-	return this->value;
+double Log::getValue(int day){
+	return this->values[day-1];
 }
 
 int Log::getWeight(){
@@ -55,4 +61,12 @@ int Log::getWeight(){
 
 char Log::getCD(){
 	return this->CD;
+}
+
+int Log::getDays(){
+	return this->values.size();
+}
+
+std::vector<double> Log::getVector(){
+	return this->values;
 }
