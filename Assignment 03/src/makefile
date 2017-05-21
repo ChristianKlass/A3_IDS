@@ -29,4 +29,4 @@ clean:
 	@echo "Directory cleaned."
 
 run:
-	@./IDS
+	./IDS Events.txt Stats.txt 1000 Mark

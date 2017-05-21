@@ -17,6 +17,7 @@ class Log {
 private:
 	std::string eventName;
 	std::vector<double> values; //SIZE DEPENDS ON NO OF DAYS
+	double val;
 	char CD;
 	int weight;
 	
@@ -24,6 +25,7 @@ private:
 public:
 	Log();
 	Log(std::string eventName, char cd, int weight);
+	Log(std::string eventName, char cd, int weight, double val);
 	//Log(std::string eventName, char cd, double value, int weight);
 	~Log();
 	
@@ -32,10 +34,11 @@ public:
 	int getWeight();
 	char getCD();
 	int getDays();
+	double getVal();
 	std::vector<double> getVector();
 	
 	void setEventName(std::string);
-	void setValue(int, double);
+	void setValue(double);
 	void setWeight(int);
 	void setCD(char);
 };

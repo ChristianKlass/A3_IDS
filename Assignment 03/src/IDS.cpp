@@ -17,6 +17,11 @@ int main (int argc, char** argv) {
 		if (argc == 5) {
 				//defaults to peter
 			username = argv[4];
+			std::stringstream ss("");
+			
+				//logfile naming format
+			ss << username << "_" << noOfDays << "_Daily.log";
+			logFile = ss.str();
 		}
 	} else if (argc != 1) {
 		std::cout 	<< "Invalid number of arguments!\n";
@@ -25,44 +30,94 @@ int main (int argc, char** argv) {
 		std::cout 	<< "Using defaults.\n";
 	}
 	
-	init();
-
-	// ~~~ LEARNING PHASE ~~~ 
 	srand((int)time(NULL));
 	
+	// ~~~ LEARNING PHASE ~~~
+	std::cout 	<< "\nStarting Learning Phase" << std::endl;
+	std::cout 	<< std::setw(30) << std::setfill('#') << "#" << std::endl;
+	if (init() == EXIT_FAILURE) {
+		std::cout 	<< "Please make sure the files are present and consistent.\n\a";
+		exit (-1);
+	}
+	
+		//generate and write logs
+	std::cout 	<< std::setw(20) << std::setfill('~') << "~" << std::endl;
 	generateLogs(noOfDays);
-
 	writeLogFile(noOfDays, logFile);
-
-	//newStatsFile will be generated in this function too.
+	
+	// ~~~ ANALYSIS PHASE ~~~
+		//start reading the logs
+		//generate new stats file
+	std::cout 	<< std::setw(20) << std::setfill('~') << "~" << std::endl;
+	std::cout 	<< "\nStarting Analysis Phase\n";
+	std::cout 	<< std::setw(30) << std::setfill('#') << "#" << std::endl;
 	readLogs(logFile);
 
-	// ~~~  ANALYSIS PHASE ~~~
-	std::string dFile = "Whatever.txt";
-	std::string stats = "newStats.txt";
-	doAnalysis (dFile, stats);
-
-		//int a = generateLiveData();
+//	// ~~~  ALERT PHASE ~~~
+// for the looping thing, enter -1 to exit
+	std::cout 	<< std::setw(20) << std::setfill('~') << "~" << std::endl;
+	std::cout 	<< "\nStarting Alert Phase\n";
+	std::cout 	<< std::setw(30) << std::setfill('#') << "#" << std::endl;
 	
-	compareLogs("Daily.log", stats);
-
-		//std::cout << "HERE" << a << std::endl;
+	while (true) {
+		anomalies = 0;
+		int liveDataDays = generateLiveData();
+		outfileToArray("live_data.log");
+		readGeneratedStats(baselineStats);
+		compareLogs(liveDataDays);
+		std::cout 	<< std::setw(30) << std::setfill('=') << "=" << std::endl;
+		std::cout 	<< "~~~~ ANOMALIES FOUND: " << anomalies << " ~~~~" << std::endl;
+	}
 
 	return EXIT_SUCCESS;
 }
 
 int init() {
-	std::cout << "\n\n\n####################################################################" << std::endl;
-
 	int success = EXIT_SUCCESS;
 
 	//IF ANY OF THE CONDITIONS FAILED
 	if (	readEvents(eventFile) == EXIT_FAILURE || readStats(statsFile) == EXIT_FAILURE) {
 		success = EXIT_FAILURE;
+	} else {
+		std::cout 	<< "DONE!\n";
+		std::cout 	<< std::setw(20) << std::setfill('~') << "~" << std::endl;
+		std::cout 	<< "Total number of Events read \t\t -> " << events.size() << std::endl;
+		std::cout 	<< "Number of events in statistical data \t -> " << stats.size() << std::endl;
+		
+		if (events.size() != stats.size()) {
+			success = EXIT_FAILURE;
+			std::cout 	<< "ERROR!  The number of entries in " << eventFile
+						<< " and " << statsFile << " do not match!\n";
+		}
+		else {
+			std::vector<bool> checks (events.size(), false);
+			
+				//supposed to check if all the elements in stats and events tally
+				//by the end of this for loop, all the elements in checks should be true
+			for (int event = 0, n = (int)events.size(); event < n; ++event) {
+				for (int stat = 0, o = (int)stats.size(); stat < o; ++stat) {
+					if (events[event]->getEventName() == stats[stat]->getEventName())
+						checks[event] = true;
+				}
+			}
+			
+			int count = 0;
+			for (std::vector<bool>::iterator it = checks.begin(); it != checks.end(); ++it) {
+				if (!*it) {
+					success = EXIT_FAILURE;
+					std::cout 	<< "ERROR!  The event: \"" << events[count]->getEventName()
+								<< "\" does not exist in " << statsFile << std::endl;
+				}
+				
+				++count;
+			}
+		}
+		
+		std::cout 	<< "Data is "
+		<< ((success == EXIT_SUCCESS ? "CONSISTENT" : "INCONSISTENT"))
+		<< "!" << std::endl;
 	}
 
-	std::cout << "\nTotal number of Events read \t\t -> " << events.size() << std::endl;
-	std::cout << "Number of events in statistical data \t -> " << stats.size() << std::endl;
 	return success;
 }
 
@@ -75,6 +130,7 @@ int readEvents(std::string filename) {
 		std::cout 	<< "Failed to read " << filename << "! Exiting.." << std::endl;
 		success = EXIT_FAILURE;
 	} else {
+		std::cout 	<< "Reading events from " << filename << "!\n";
 		int count;
 		infile >> count;
 		infile.ignore(256, '\n');
@@ -129,6 +185,7 @@ int readStats(std::string filename) {
 		std::cout 	<< "Failed to read " << filename << "! Exiting.." << std::endl;
 		success = EXIT_FAILURE;
 	} else {
+		std::cout 	<< "Reading stats from " << filename << "!\n";
 		int count;
 		infile >> count;
 		infile.ignore(256, '\n');
@@ -143,6 +200,36 @@ int readStats(std::string filename) {
 
 			//TEST
 			stats.push_back(new Stat(eventName, mean, standardDeviation)); 
+		}
+	}
+
+	return success;
+}
+
+int readGeneratedStats(std::string filename) {
+	int success = EXIT_SUCCESS;
+	std::fstream infile (filename.c_str(), std::ios::in);
+
+	if (!infile) {
+		infile.close();
+		std::cout 	<< "Failed to read " << filename << "! Exiting.." << std::endl;
+		success = EXIT_FAILURE;
+	} else {
+		int count;
+		infile >> count;
+		infile.ignore(256, '\n');
+
+		std::string line, delim = ":";
+		while (std::getline(infile, line) ) {
+			std::vector<std::string> tokens = tokenize(line, delim);
+			std::string eventName = tokens[0];
+			float mean, standardDeviation;
+			mean = atof(tokens[1].c_str());
+			standardDeviation = atof(tokens[2].c_str());
+
+			//TEST
+			generatedStats.push_back(new Stat(eventName, mean, standardDeviation)); 
+
 		}
 	}
 
@@ -209,46 +296,14 @@ double findVariance (std::vector<double> numbers, double mean) {
 	return variance;
 }
 
-//void compareStats() {
-//	std::string newStatsFile;
-//	std::cout 	<< "Please enter name of new Stats file: ";
-//	std::getline(std::cin, newStatsFile);
-//	
-//	std::fstream infile (newStatsFile.c_str(), std::ios::in);
-//	if (!infile) {
-//		std::cout 	<< "Could not find " << newStatsFile << "! Please try again!\n";
-//		infile.close();
-//	} else {
-//		int count;
-//		std::string eventName;
-//		float mean = 0.0, standardDeviation = 0.0, anomalyCount = 0.0;
-//		infile >> count;
-//		infile.ignore(256, '\n');
-//		
-//		std::string line, delim = ":";
-//		
-//			//reads the new stats file
-//		while (std::getline(infile, line) ) {
-//			std::vector<std::string> tokens = tokenize(line, delim);
-//			eventName = tokens[0];
-//			mean = atof(tokens[1].c_str());
-//			standardDeviation = atof(tokens[2].c_str());
-//			
-//		}
-//	}
-//}
-
 void writeLogFile(int noOfDays, std::string filename){
-	std::cout << "\n\n\n####################################################################" << std::endl;
-	std::cout << "\nBegin writing to log file" << std::endl;
+	std::cout << "Writing logs to " << filename << "..\n";
 	std::fstream outFile(logFile.c_str(), std::ios::out);
 	
 	if (!outFile) {
 		outFile.close();
-		std::cout << "\n*****" << filename << " failed to open for data writing*****" << std::endl;
+		std::cout << "\n****" << filename << " failed to open for data writing****" << std::endl;
 	} else {
-		
-		//FOR LOOP TO EXTRACT DAILY EVENTS FROM LOGSHEET
 		for(int k = 0; k < noOfDays; k++){
 			std::stringstream data;
 			outFile << "~~~ Day " << k + 1 << " ~~~" << std::endl;
@@ -269,15 +324,14 @@ void writeLogFile(int noOfDays, std::string filename){
 			}
 		}
 		
+		std::cout 	<< "DONE!\n";
 		outFile.close();
 	}
 }
 
 void generateLogs(int numberOfLogs) {
-	//TEST MAKING LOGS
-	//LOOP ACCORDING TO NUMBER OF EVENTS
-	//std::cout << events.size() << std::endl;
-	for(int i = 0; i < events.size(); i++){
+	std::cout << "Generating logs for " << numberOfLogs << " days..\n";
+ 	for(int i = 0; i < events.size(); i++){
 		//PUSH EVENTS INTO VECTOR OF LOGS
 		logs.push_back(new Log(events[i]->getEventName(), events[i]->getCD(), events[i]->getWeight()));
 
@@ -291,7 +345,7 @@ void generateLogs(int numberOfLogs) {
 					value = generateValue(stats[i]->getMean(), stats[i]->getStandardDeviation());
 				}while(withinStatisticC(value, cEvent.getMin(), cEvent.getMax()) == false);
 				
-				logs[i]->setValue(k, value);
+				logs[i]->setValue(value);
 			}
 
 			if(events[i]->getCD() == 'D'){
@@ -301,17 +355,23 @@ void generateLogs(int numberOfLogs) {
 					value = generateValue(stats[i]->getMean(), stats[i]->getStandardDeviation());
 				}while(withinStatisticC(value, dEvent.getMin(), dEvent.getMax()) == false);
 				
-				logs[i]->setValue(k, value);
+				logs[i]->setValue(value);
 			}
 		}
-		
 	}
+	
+	std::cout 	<< "DONE!\n";
 }
 
 void writeStats (std::vector<double> mean, std::vector<double> stdDiv) {
-	std::stringstream output;
-	std::string filename = "newStats.txt";
-	std::fstream outfile(filename.c_str(), std::ios::out);
+	std::stringstream output, statFilename;
+	statFilename << username << "_" << noOfDays << "_stats.txt";
+	baselineStats = statFilename.str();
+	std::fstream outfile (baselineStats.c_str(), std::ios::out);
+	
+	std::cout 	<< "Generating " << baselineStats << " (baseline statistics)..\n";
+//	std::string filename = "newStats.txt";
+//	std::fstream outfile(filename.c_str(), std::ios::out);
 
 	if (!outfile) {
 		std::cout 	<< "FAIL!\n";
@@ -335,8 +395,7 @@ void writeStats (std::vector<double> mean, std::vector<double> stdDiv) {
 				<< std::setprecision(0) << std::fixed 
 				<< stdDiv[i] << ":";
 			}
-
-		//	std::cout 	<< output.str() << std::endl;
+			
 			outfile << output.str() << std::endl;
 		}
 
@@ -345,9 +404,9 @@ void writeStats (std::vector<double> mean, std::vector<double> stdDiv) {
 }
 
 void readLogs(std::string filename) {
-	std::cout << "\n\n\n####################################################################" << std::endl;
-	std::cout << "\nBegin reading of " << filename << std::endl;
-	std::cout << "Number of events read \t-> " << eventNames.size() << std::endl << std::endl;
+	
+	std::cout << "Reading " << filename << std::endl;
+	std::cout << "Events for each Log \t-> " << eventNames.size() << std::endl << std::endl;
 	for(int i = 0; i < events.size(); i++){
 		std::cout << "\t->" << eventNames[i] << std::endl;
 	}
@@ -370,7 +429,12 @@ void readLogs(std::string filename) {
 		ss << "~~~ Day " << day << " ~~~";
 		while (std::getline(infile, line)) {
 			if (line == ss.str()) {
-				std::cout 	<< "Processing information for day " << day++ << "!\n";
+					//showing ALL the information is a bit much
+				if (day % 30 == 0) {
+					std::cout 	<< "Processing information for day " << day << "!\n";
+				}
+				
+				++day;
 				ss.str("");
 
 				ss << "~~~ Day " << day << " ~~~";
@@ -390,6 +454,7 @@ void readLogs(std::string filename) {
 			}
 		}
 
+		std::cout 	<< "Finished reading " << day - 1 << " logs\n";
 		writeStats(means, stdDivs);
 
 		infile.close();
@@ -489,22 +554,38 @@ bool withinStatisticD(int value, int min, int max){
 
 int generateLiveData(){
 	std::string liveDataFile, noOfDays;
-	int days, count;
-	std::cout << "Please enter the base stats file for live data: ";
+	int days = 0;
+	
+	std::cout << "\nPlease enter the live data stats file [-1 to quit]: ";
 	std::getline(std::cin, liveDataFile);
-	std::cin.clear();
-	std::cout << "\nPlease enter the number of days of data to be generated: ";
-	std::getline(std::cin, noOfDays);
-	days = atoi(noOfDays.c_str());
-	std::cin.clear();
-	int success = EXIT_SUCCESS;
+		//std::cin.clear();
+		//std::cin.ignore(256, '\n');
+
+	if (liveDataFile == "-1") exit(0);
+	
 	std::fstream infile (liveDataFile.c_str(), std::ios::in);
 
-	if (!infile) {
+	if (!infile.good()) {
 		infile.close();
 		std::cout 	<< "\nFailed to read " << liveDataFile << "! Exiting.." << std::endl;
-		success = EXIT_FAILURE;
 	} else {
+		std::cout 	<< "Number of days of data to be generated from " << liveDataFile << ": ";
+			//std::cin 	>> days;
+		
+		std::getline(std::cin, noOfDays);
+		days = atoi(noOfDays.c_str());
+		std::cin.clear();
+		
+		while (!days) {
+			std::cout 	<< "\nError!  Not a valid number." << std::endl;
+			std::cin.clear();
+			std::cin.ignore(256, '\n');
+			std::cout 	<< "\nNumber of days of data to be generated from " << liveDataFile << ": ";
+			std::getline(std::cin, noOfDays);
+			days = atoi(noOfDays.c_str());
+			std::cin.clear();
+		}
+		
 		int count;
 		infile >> count;
 		infile.ignore(256, '\n');
@@ -520,12 +601,13 @@ int generateLiveData(){
 			//TEST
 			liveData.push_back(new Stat(eventName, mean, standardDeviation)); 
 		}
+		
+		infile.close();
+		generateLiveLogs(days);
+		writeLiveLogFile(days, "live_data.log");
 	}
-
-	generateLiveLogs(days);
-
-	writeLiveLogFile(days, "liveDataLog.txt");
-	return success;
+	
+	return days;
 }
 
 
@@ -534,10 +616,12 @@ void generateLiveLogs(int numberOfLogs) {
 	//LOOP ACCORDING TO NUMBER OF EVENTS
 	//std::cout << events.size() << std::endl;
 
-	std::cout << "\nBegin generation of RANDOM LIVE DATA of " << numberOfLogs << " days!" << std::endl;
+	std::cout << "Generating " << numberOfLogs << " days of LIVE DATA..\n";
 	for(int i = 0; i < events.size(); i++){
 		//PUSH EVENTS INTO VECTOR OF LOGS
-		liveLogs.push_back(new Log(events[i]->getEventName(), events[i]->getCD(), events[i]->getWeight()));
+		liveLogs.push_back(new Log(events[i]->getEventName(),
+								   events[i]->getCD(),
+								   events[i]->getWeight()));
 
 		//GENERATE VALUES FOR EVENTS ACCORDING TO NUMBER OF DAYS
 		for(int k = 0; k < numberOfLogs; k++){
@@ -549,7 +633,7 @@ void generateLiveLogs(int numberOfLogs) {
 					value = generateValue(liveData[i]->getMean(), liveData[i]->getStandardDeviation());
 				}while(withinStatisticC(value, cEvent.getMin(), cEvent.getMax()) == false);
 				
-				liveLogs[i]->setValue(k, value);
+				liveLogs[i]->setValue(value);
 			}
 
 			if(events[i]->getCD() == 'D'){
@@ -559,16 +643,14 @@ void generateLiveLogs(int numberOfLogs) {
 					value = generateValue(liveData[i]->getMean(), liveData[i]->getStandardDeviation());
 				}while(withinStatisticC(value, dEvent.getMin(), dEvent.getMax()) == false);
 				
-				liveLogs[i]->setValue(k, value);
+				liveLogs[i]->setValue(value);
 			}
 		}
-		
 	}
+	std::cout 	<< "DONE!\n";
 }
 
 void writeLiveLogFile(int noOfDays, std::string filename){
-	std::cout << "\n\n\n####################################################################" << std::endl;
-	std::cout << "\nBegin writing to live data log file" << std::endl;
 	std::fstream outFile(filename.c_str(), std::ios::out);
 	
 	if (!outFile) {
@@ -577,9 +659,9 @@ void writeLiveLogFile(int noOfDays, std::string filename){
 	} else {
 		
 		//FOR LOOP TO EXTRACT DAILY EVENTS FROM LOGSHEET
-		for(int k = 0; k < noOfDays; k++){
+		for(int k = 1; k <= noOfDays; k++){
 			std::stringstream data;
-			outFile << "~~~ Day " << k + 1 << " ~~~" << std::endl;
+			outFile << "~~~ Day " << k << " ~~~" << std::endl;
 			for (int i = 0; i < events.size(); ++i) {
 				data.str("");
 				data << liveLogs[i]->getEventName() << ":";
@@ -601,132 +683,101 @@ void writeLiveLogFile(int noOfDays, std::string filename){
 	}
 }
 
-
-void compareLogs(std::string logFile, std::string statsFile) {
-	std::cout << "\n\n\n####################################################################" << std::endl;
-	std::cout << "\nBegin reading of " << logFile << " and " << statsFile << std::endl;
-
-//	for(int i = 0; i < events.size(); i++){
-//		std::cout << "\t->" << eventNames[i] << std::endl;
-//	}
+void outfileToArray(std::string filename){
+		//std::cout << "####################################################################" << std::endl;
 	
-		//read statsFile and populate stats vector
-	std::vector <Stat*> newStats;
-	std::fstream stats (statsFile.c_str());
-	
-	if (!stats) {
-		std::cout 	<< "Could not open " << logFile << "! Please make sure it exists!\n";
-		stats.close();
-	} else {
-		std::string statLine, delim = ":";
-		std::getline(stats, statLine); //read the first number
-		
-		while (std::getline(stats, statLine)) {
-			std::vector<std::string> tokens = tokenize(statLine, delim);
-			std::string eventName = tokens[0];
-			float mean = atof(tokens[1].c_str()), stdDiv = atof(tokens[2].c_str());
-			newStats.push_back(new Stat (eventName, mean, stdDiv));
-		}
-	}
-	
-	std::cout << std::endl;
-		//read logFile and compare
-	std::fstream theLog (logFile.c_str(), std::ios::in);
-
-	if (!theLog) {
-		std::cout 	<< "Could not open " << logFile << "! Please make sure it exists!\n";
-		theLog.close();
-	} else {
-		std::string logLine, delim = ":";
-		std::stringstream header ("");
-		int day = 1;
-		std::vector<Log*> dailyLog;
-		header << "~~~ Day " << day << " ~~~";
-		while (std::getline(theLog, logLine)) {
-				//we're reading the first line (the header)
-			if (logLine == header.str()) {
-				bool anomaly = compareWithStats(dailyLog, newStats);
-				
-				if (anomaly) {
-					std::cout 	<< "Anomaly found at day " << day << "!\n";
-				}
-				header.str("");
-				header << "~~~ Day " << ++day << " ~~~";
-				dailyLog.clear();
-			} else {
-				std::vector<std::string> logTokens = tokenize(logLine, delim);
-					//std::string eventName, char cd, int weight
-					//Logins:D:0:2:
-				std::string lName = logTokens[0];
-				int weight = atoi(logTokens[2].c_str());
-				char CD;
-				if (logTokens[1] == "D") {
-					CD = 'D';
-				} else {
-					CD = 'C';
-				}
-				
-				std::cout 	<< "PUSHING BACK\n";
-				dailyLog.push_back(new Log(lName, CD, weight));
+	std::fstream infile (filename.c_str(), std::ios::in);
+	std::string line, delim = ":";
+	while(std::getline(infile, line)){
+		for(int i = 0; i < eventNames.size(); i++){
+			std::getline(infile,line);
+			std::vector<std::string> tokens = tokenize(line, delim);
+			char cd = 'k';
+			if(tokens[1] == "C"){
+				cd = 'C';
+			}else if(tokens[1] == "D"){
+				cd = 'D';
 			}
+			std::string eventName = tokens[0];
+			double value = atof(tokens[2].c_str());
+			int weight = atoi(tokens[3].c_str());
+			liveLogs.push_back(new Log(eventName, cd, weight, value));
+		}
+	}
+	infile.close();
+}
+
+void compareLogs(int noOfDays){
+	int weight=0;
+	for(int i = 0; i < events.size(); i++){
+		weight += events[i]->getWeight();
+	}
+	
+	weight = 2 * weight;
+		//std::cout << "test " << weight << std::endl;
+	double temp = 0;
+	float value[noOfDays];
+	for(int i = 0; i < noOfDays; i++){
+			//header
+		std::cout 	<< std::setw(30) << std::setfill('=') << "=" << std::endl;
+		std::cout << "\nDay " << (i + 1) << std::endl;
+		std::cout 	<< std::setw(5) << std::setfill('-') << "-" << std::endl;
+		value[i] = 0.0;
+		
+			//body
+		for(int j = 0; j < events.size(); j++){
+			temp = value[i];
+			value[i] += std::abs(generatedStats[j]->getMean() - liveLogs[j]->getValue(i+1));
+			std::cout 	<< "Event : " << events[j]->getEventName() << std::endl;
+			if(value[i] != 0){
+				value[i] = value[i] / generatedStats[j]->getStandardDeviation();
+			}
+			value[i] = value[i] * liveLogs[j]->getWeight();
+			value[i] += temp;
 		}
 		
-		theLog.close();
-	}
+			//summary
+		std::cout 	<< std::setw(30) << std::setfill('~') << "~" << std::endl;
+		std::cout 	<< "Threshold:\t" << weight
+					<< std::setprecision(2) << std::fixed
+					<< "\nCurrent:\t" << value[i] << std::endl;
+		
+		if(value[i] > weight){
+			std::cout 	<< "@@@@@@Anomaly detected!@@@@@@@" << std::endl;
+			++anomalies;
+		} else {
+			std::cout 	<< "No anomalies detected.\n";
+		}
+	}	
+
 }
 
 bool compareWithStats(std::vector<Log*> dailyLog, std::vector<Stat*> stats) {
 	bool ans = false;
 	double weight = 0;
-
+	double temp = 0;
+	
 	for(int i = 0; i < events.size(); i++){
-		std::cout << events[i]->getEventName() << std::endl;
 		weight += events[i]->getWeight();
 	}
 
 	weight = 2 * weight;
-
-	std::cout << weight << std::endl;
+	std::cout << " stats size " << stats.size() << std::endl << " dailylog size " << dailyLog.size() << std::endl;
+	for(int i = 0; i < stats.size(); i++){
+		for(int k = 0; k < dailyLog.size(); k++){
+			std::cout << "Day " << (k + 1);
+//			std::cout 	<< stats[i]->getEventName() << std::endl;
+			std::cout 	<< dailyLog[k]->getEventName() << " " << dailyLog[k]->getVal() << std::endl;
+			
+//			if (stats[i]->getEventName() == dailyLog[i]->getEventName()) {
+//					//	temp = stats[i]->getMean() - dailyLog[i]->getValue(0);
+//					//std::cout 	<< dailyLog[i]->getValue(0) << std::endl;
+//			}
+		}
+	}
 	
 	return ans;
 }
-
-	//		std::string line, delim = ":";
-	//		std::stringstream ss ("");
-	//		int day = 1;
-	//
-	//			//store the total login, eSent, eReceived, timeOnline;
-	//		std::vector<double> means (events.size(), 0.0), stdDivs (events.size(), 0.0);
-	//
-	//		ss << "~~~ Day " << day << " ~~~";
-	//		while (std::getline(infile, line)) {
-	//			if (line == ss.str()) {
-	//				std::cout 	<< "Comparing information for day " << day++ << "!\n";
-	//				ss.str("");
-	//
-	//				ss << "~~~ Day " << day << " ~~~";
-	//			} else {
-	//				std::vector<std::string> tokens = tokenize(line, delim);
-	//				std::string eventName = tokens[0];
-	//				tokens.pop_back(); 	//POP BACK BECAUSE LAST ELEMENT IS BLANK
-	//
-	//					//compare tokens with stats
-	//
-	//
-	//				for (int i = 0, n = (int)logs.size(); i < n; ++i) {
-	//					if (logs[i]->getEventName() == eventName) {
-	//						std::vector<double> totals = logs[i]->getVector();
-	//						means[i] = findMean(totals);
-	//						stdDivs[i] = sqrt(findVariance(totals, means[i]));
-	//						break;
-	//					}
-	//				}
-	//			}
-	//		}
-	//
-	//		writeStats(means, stdDivs);
-
-
 
 
 
